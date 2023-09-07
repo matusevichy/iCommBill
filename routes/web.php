@@ -6,12 +6,14 @@ use App\Http\Controllers\BotManController;
 use App\Http\Controllers\CounterController;
 use App\Http\Controllers\CounterValueController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\NoticeForOwnerController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PersonalAreaController;
 use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\TarifController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +43,9 @@ Route::resource('tarifs', TarifController::class)->except('create');
 
 Route::get('/notices/{organization}/create', [NoticeController::class, 'create'])->name('notices.create');
 Route::resource('notices', NoticeController::class)->except('create');
+
+Route::get('/noticeforowners/{organization}/create', [NoticeForOwnerController::class, 'create'])->name('noticeforowners.create');
+Route::resource('noticeforowners', NoticeForOwnerController::class)->except('create');
 
 Route::get('/saldos/{abonent}/create', [SaldoController::class, 'create'])->name('saldos.create');
 Route::resource('saldos', SaldoController::class)->except('create');

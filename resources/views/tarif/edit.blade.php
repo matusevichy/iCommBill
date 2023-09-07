@@ -6,10 +6,20 @@
     <form action="{{route('tarifs.update', $tarif)}}" method="post">
         @csrf
         <div class="form-floating mb-3">
+            <input id="name" type="text"
+                   class="form-control @error('name') is-invalid @enderror" name="name"
+                   value="{{ $tarif->name }}" autocomplete="name" autofocus>
+            <label for="name">{{ __('Tarif name') }}</label>
+            @error('name')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+        <div class="form-floating mb-3">
             <input type="number" id="value" name="value" class="form-control @error('value') is-invalid @enderror"
                    step="0.01" value="{{ $tarif->value }}" required autocomplete="value">
             <label for="value">{{__('Tarif value')}}</label>
-            <span class="text-danger">* {{__('tariffs calculated by the area of the plot (apartment) must be calculated for the area in square meters')}}</span>
+            <span
+                class="text-danger">* {{__('tariffs calculated by the area of the plot (apartment) must be calculated for the area in square meters')}}</span>
 
             @error('value')
             <span class="invalid-feedback" role="alert">
@@ -30,7 +40,8 @@
             @enderror
         </div>
         <div class="form-floating mb-3">
-            <input type="date" id="date_end" name="date_end" class="form-control @error('date_end') is-invalid @enderror"
+            <input type="date" id="date_end" name="date_end"
+                   class="form-control @error('date_end') is-invalid @enderror"
                    value="{{ $tarif->date_end }}" autocomplete="date_end">
             <label for="value">{{__('Date end')}}</label>
 
@@ -46,7 +57,7 @@
                 <option value="" selected>{{__('Select accrual type')}}</option>
                 @foreach($accrual_types as $type)
                     <option value="{{$type->id}}" {{$type->id == $tarif->accrualtype_id? 'selected': ''}}>
-                        {{__($type->name)}}
+                        {{__($type->name)}}  {{($type->by_counter == true)? "(".__("by counter").")":""}}
                     </option>
                 @endforeach
             </select>

@@ -55,7 +55,7 @@
             @if($current_saldo !== 0)
                 <div class="row">
                     <div class="col">
-                        {{__($accrual_type->name)}}
+                        {{__($accrual_type->name)}}  {{($accrual_type->by_counter == true)? "(".__("by counter").")":""}}
                     </div>
                     <div class="col">
                         {{$current_saldo}}

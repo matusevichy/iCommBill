@@ -33,7 +33,7 @@
                 <option value="">{{__('Select accrual type')}}</option>
                 @foreach($accrual_types as $type)
                     <option value="{{$type->id}}" {{$type->id == $accrual->accrualtype->id? 'selected' : ''}}>
-                        {{__($type->name)}}
+                        {{__($type->name)}} {{($type->by_counter == true)? "(".__("by counter").")":""}}
                     </option>
                 @endforeach
             </select>

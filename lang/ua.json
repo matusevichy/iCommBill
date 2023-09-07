@@ -25,6 +25,8 @@
     "Not active": "Не активний",
     "Actions": "Дії",
     "Notices": "Повідомлення",
+    "There are no notices": "Повідомлення відсутні",
+    "Notices for owner": "Повідомлення для керівника",
     "Abonents": "Абоненти",
     "Tarifs": "Тарифи",
     "Current tarifs": "Діючі тарифи",
@@ -76,6 +78,7 @@
     "Select all": "Обрати всі",
     "Accruals by square": "Нарахування за площею",
     "Accruals date": "Дата нарахувань",
+    "Tarif name": "Назва тарифу",
     "Tarif value": "Вартість тарифу",
     "tariffs calculated by the area of the plot (apartment) must be calculated for the area in square meters": "тарифи, що розраховуються за площею ділянки (квартири), необхідно розраховувати для площі в метрах квадратних",
     "m": "м",
@@ -92,5 +95,7 @@
     "Enter the counter value as an integer": "Введіть показники лічильника в вигляді цілого числа",
     "on date": "на дату",
     "Exit": "Вихід",
-    "Value accepted": "Показники прийняті"
+    "Value accepted": "Показники прийняті",
+    "by counter": "за лічильником",
+    "Input message": "Введіть текст повідомлення"
 }

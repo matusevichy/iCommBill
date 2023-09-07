@@ -33,7 +33,9 @@
                     class="form-select  @error('accrualtype_id') is-invalid @enderror" required>
                 <option value="" selected>{{__('Select accrual type')}}</option>
                 @foreach($accrual_types as $type)
-                    <option value="{{$type->id}}">{{__($type->name)}}</option>
+                    <option value="{{$type->id}}">{{__($type->name)}}
+                        {{($type->by_counter == true)? "(".__("by counter").")":""}}
+                    </option>
                 @endforeach
             </select>
 

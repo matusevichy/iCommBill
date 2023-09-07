@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Conversations\CounterValueConversation;
+use App\Conversations\SendMessageConversation;
 use App\Models\Abonent;
-use App\Models\CounterValue;
 use App\Models\Dictionary\AccrualType;
 use App\Models\Notice;
-use App\Models\Organization;
 use App\Models\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
@@ -86,7 +85,10 @@ class BotManController extends Controller
                     ->addRow(
                         KeyboardButton::create(__('Arrears'))->callbackData('/' . $account . 'arrears'),
                         KeyboardButton::create(__("Notices"))->callbackData('/' . $account . 'notices'),
-                        KeyboardButton::create(__("Put counter value"))->callbackData('/' . $account . 'put_value')
+                    )
+                    ->addRow(
+                        KeyboardButton::create(__("Put counter value"))->callbackData('/' . $account . 'put_value'),
+                        KeyboardButton::create(__("Send message for owner"))->callbackData('/' . $account . 'send_message'),
                     )
                     ->toArray();
                 $abonent = Abonent::where('account_number', $account)->where('user_id', $user->id)->first();
@@ -101,6 +103,9 @@ class BotManController extends Controller
                 }
                 if ($command == 'put_value') {
                     $bot->startConversation(new CounterValueConversation($abonent));
+                }
+                if ($command == 'send_message') {
+                    $bot->startConversation(new SendMessageConversation($abonent));
                 }
             } else {
                 $message = __("You are not authorized");
@@ -159,6 +164,7 @@ class BotManController extends Controller
         foreach ($notices as $notice) {
             $message .= $notice->text . "\n";
         }
+        if ($message == "") $message = __("There are no notices");
         $bot->reply($message, $keyboard, ['parse_mode' => 'HTML']);
     }
 

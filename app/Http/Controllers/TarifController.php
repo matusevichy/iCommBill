@@ -45,6 +45,7 @@ class TarifController extends Controller
         $organization = Organization::whereId($request->organization_id)->first();
         if ($user == null || $user->cannot('create', [Tarif::class, $organization])) return abort(403);
         $validation = $request->validate([
+            'name' => ['string', 'max:255', 'nullable'],
             'value' => ['required', 'numeric'],
             //ToDo check next condition
             'date_begin' => ['required', 'date', function ($attribute, $value, $fail) use ($request) {
@@ -63,6 +64,7 @@ class TarifController extends Controller
             'accrualtype_id' => ['required', 'exists:accrual_types,id']
         ]);
         $tarif = new Tarif();
+        $tarif->name = $request->name;
         $tarif->value = $request->value;
         $tarif->date_begin = $request->date_begin;
         $tarif->date_end = $request->date_end;
@@ -111,6 +113,7 @@ class TarifController extends Controller
         $user = Auth::user();
         if ($user == null || $user->cannot('update', $tarif)) return abort(403);
         $validation = $request->validate([
+            'name' => ['string', 'max:255', 'nullable'],
             'value' => ['required', 'numeric'],
             //ToDo check next condition
             'date_begin' => ['required', 'date', function ($attribute, $value, $fail) use ($request) {
@@ -128,7 +131,7 @@ class TarifController extends Controller
             'accrualtype_id' => ['required', 'exists:accrual_types,id']
         ]);
 
-        $tarif->fill($request->only('value', 'date_begin', 'date_end', 'accrualtype_id'));
+        $tarif->fill($request->only('name', 'value', 'date_begin', 'date_end', 'accrualtype_id'));
         $tarif->save();
 
         return redirect('/organizations/'.$tarif->organization_id);

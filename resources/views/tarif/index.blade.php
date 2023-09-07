@@ -8,6 +8,7 @@
     <table class="table table-striped table-responsive-md">
         <thead>
         <tr>
+            <th>{{__('Tarif name')}}</th>
             <th scope="col">{{__('Accrual type')}}</th>
             <th>{{__('Value')}}</th>
             <th>{{__('Date begin')}}</th>
@@ -18,6 +19,7 @@
         <tbody>
         @foreach($organization->tarifs as $tarif)
             <tr>
+                <td>{{$tarif->name}}</td>
                 <td>{{__($tarif->accrualtype->name)}}</td>
                 <td>{{$tarif->value}}</td>
                 <td>{{$tarif->date_begin}}</td>

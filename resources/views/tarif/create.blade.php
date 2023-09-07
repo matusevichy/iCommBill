@@ -6,10 +6,20 @@
     <form action="{{route('tarifs.store')}}" method="post">
         @csrf
         <div class="form-floating mb-3">
+            <input id="name" type="text"
+                   class="form-control @error('name') is-invalid @enderror" name="name"
+                   value="{{ old('name') }}" autocomplete="name" autofocus>
+            <label for="name">{{ __('Tarif name') }}</label>
+            @error('name')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+        <div class="form-floating mb-3">
             <input type="number" id="value" name="value" class="form-control @error('value') is-invalid @enderror"
                    step="0.01" value="{{ old('value') }}" required autocomplete="value">
             <label for="value">{{__('Tarif value')}}</label>
-            <span class="text-danger">* {{__('tariffs calculated by the area of the plot (apartment) must be calculated for the area in square meters')}}</span>
+            <span
+                class="text-danger">* {{__('tariffs calculated by the area of the plot (apartment) must be calculated for the area in square meters')}}</span>
             @error('value')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -29,7 +39,8 @@
             @enderror
         </div>
         <div class="form-floating mb-3">
-            <input type="date" id="date_end" name="date_end" class="form-control @error('date_end') is-invalid @enderror"
+            <input type="date" id="date_end" name="date_end"
+                   class="form-control @error('date_end') is-invalid @enderror"
                    value="" autocomplete="date_end">
             <label for="value">{{__('Date end')}}</label>
 
@@ -44,7 +55,9 @@
                     class="form-select  @error('accrualtype_id') is-invalid @enderror" required>
                 <option value="" selected>{{__('Select accrual type')}}</option>
                 @foreach($accrual_types as $type)
-                    <option value="{{$type->id}}">{{__($type->name)}}</option>
+                    <option value="{{$type->id}}">{{__($type->name)}}
+                        {{($type->by_counter == true)? "(".__("by counter").")":""}}
+                    </option>
                 @endforeach
             </select>
 

@@ -11,6 +11,7 @@ class Tarif extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'value',
         'date_begin',
         'date_end',

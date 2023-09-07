@@ -35,6 +35,10 @@ class Organization extends Model
         return $this->hasMany(Notice::class);
     }
 
+    public function noticeforowners(){
+        return $this->hasMany(NoticeForOwner::class);
+    }
+
     public function tarifs(){
         return $this->hasMany(Tarif::class);
     }

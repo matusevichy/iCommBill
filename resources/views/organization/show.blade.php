@@ -48,6 +48,20 @@
         </div>
         <div class="accordion" id="accordion_organization">
             <div class="accordion-item">
+                <h2 class="accordion-header" id="notice_for_owners_header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#notice_for_owners" aria-expanded="false" aria-controls="notice_for_owners">
+                        {{__('Notices for owner')}}
+                    </button>
+                </h2>
+                <div id="notice_for_owners" class="accordion-collapse collapse" aria-labelledby="notice_for_owners_header"
+                     data-bs-parent="#accordion_organization">
+                    <div class="accordion-body">
+                        @include('noticeforowner.index', $organization)
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
                 <h2 class="accordion-header" id="notices_header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#notices" aria-expanded="false" aria-controls="notices">
