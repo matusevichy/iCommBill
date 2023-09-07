@@ -77,7 +77,7 @@ class BotManController extends Controller
             $bot->reply($message);
         });
 
-        $botman->hears('/([0-9]+)(arrears|notices|put_value|)', function (BotMan $bot, $account, $command) {
+        $botman->hears('/([0-9]+)(arrears|notices|put_value|send_message|)', function (BotMan $bot, $account, $command) {
             $user = $this->getUser($bot->getUser()->getId());
             if ($user != null) {
                 $keyboard = Keyboard::create()->type(Keyboard::TYPE_INLINE)
