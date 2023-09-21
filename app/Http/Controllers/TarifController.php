@@ -70,6 +70,7 @@ class TarifController extends Controller
         $tarif->date_end = $request->date_end;
         $tarif->organization_id = $request->organization_id;
         $tarif->accrualtype_id = $request->accrualtype_id;
+        $tarif->by_square = $request->has('by_square');
         $tarif->save();
 
         return redirect('/organizations/'.$organization->id);
@@ -130,8 +131,8 @@ class TarifController extends Controller
             'date_end' => ['date', 'after:date_begin', 'nullable'],
             'accrualtype_id' => ['required', 'exists:accrual_types,id']
         ]);
-
         $tarif->fill($request->only('name', 'value', 'date_begin', 'date_end', 'accrualtype_id'));
+        $tarif->by_square = $request->has('by_square');
         $tarif->save();
 
         return redirect('/organizations/'.$tarif->organization_id);

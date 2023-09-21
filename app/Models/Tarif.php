@@ -16,7 +16,8 @@ class Tarif extends Model
         'date_begin',
         'date_end',
         'organization_id',
-        'accrualtype_id'
+        'accrualtype_id',
+        'by_square'
     ];
 
     public function organization(){

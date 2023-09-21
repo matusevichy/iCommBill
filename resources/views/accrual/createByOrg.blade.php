@@ -34,10 +34,6 @@
             </span>
                 @enderror
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="by_square" name="by_square">
-                <label class="form-check-label ps-1">{{__('Accruals by square')}}</label>
-            </div>
             <div>
                 <h3>{{__('Abonents')}}</h3>
                 <div class="form-check">

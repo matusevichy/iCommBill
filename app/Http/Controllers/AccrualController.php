@@ -79,7 +79,7 @@ class AccrualController extends Controller
         foreach ($request->abonents as $abonent_id) {
             $abonent = Abonent::whereId($abonent_id)->first();
             $accrual = new Accrual();
-            $accrual->value = $request->by_square != null? $tarif->value * $abonent->square : $tarif->value;
+            $accrual->value = $tarif->by_square == true? $tarif->value * $abonent->square : $tarif->value;
             $accrual->date = $request->date;
             $accrual->abonent_id = $abonent_id;
             $accrual->accrualtype_id = $request->accrualtype_id;

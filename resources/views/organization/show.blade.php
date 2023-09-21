@@ -81,6 +81,8 @@
                     @include('notice.index', $organization)
                 </div>
                 <div class="tab-pane fade" id="v-pills-tarifs" role="tabpanel" aria-labelledby="v-pills-tarifs-tab">
+                    <a href="{{route('accruals.createByOrg', $organization->id)}}" class="btn btn-primary  mb-1"
+                       role="button">{{__("Create accruals for abonents")}} </a>
                     @include('tarif.index', $organization)
                 </div>
                 <div class="tab-pane fade" id="v-pills-abonents" role="tabpanel" aria-labelledby="v-pills-abonents-tab">
