@@ -47,7 +47,6 @@ class CounterController extends Controller
         if ($user == null || $user->cannot('create', [Counter::class, $abonent])) return abort(403);
         $validation = $request->validate([
             'number' => ['string', 'max:255'],
-            //ToDo check next condition (orWhere)
             'date_begin' => ['required', 'date', function ($attribute, $value, $fail) use ($request) {
                 $counters = Counter::where('abonent_id', $request->abonent_id)->
                 where('accrualtype_id', $request->accrualtype_id)->
@@ -62,7 +61,7 @@ class CounterController extends Controller
             'date_end' => ['date'],
             'abonent_id' => ['required', 'exists:abonents,id'],
             'accrualtype_id' => ['required', 'exists:accrual_types,id'],
-            'counter_value' => ['required', 'numeric']
+            'count_zones' => ['required', 'numeric', 'between:1,2']
         ]);
 
         $counter = new Counter();
@@ -71,15 +70,38 @@ class CounterController extends Controller
         $counter->date_end = $request->date_end;
         $counter->abonent_id = $request->abonent_id;
         $counter->accrualtype_id = $request->accrualtype_id;
+        $counter->count_zones = $request->count_zones;
         $counter->save();
 
-        $counter_value = new CounterValue();
-        $counter_value->value = $request->counter_value;
-        $counter_value->is_real = false;
-        $counter_value->is_blocked = true;
-        $counter_value->date = $request->date_begin;
-        $counter_value->counter_id = $counter->id;
-        $counter_value->save();
+        if ($counter->count_zones == 1) {
+            $counter_value = new CounterValue();
+            $counter_value->value = $request->counter_value;
+            $counter_value->is_real = true;
+            $counter_value->is_blocked = true;
+            $counter_value->date = $request->date_begin;
+            $counter_value->counter_id = $counter->id;
+            $counter_value->save();
+        }
+
+        if ($counter->count_zones == 2) {
+            $counter_value_1 = new CounterValue();
+            $counter_value_1->value = $request->counter_value_1;
+            $counter_value_1->is_real = true;
+            $counter_value_1->is_blocked = true;
+            $counter_value_1->date = $request->date_begin;
+            $counter_value_1->counter_id = $counter->id;
+            $counter_value_1->counterzonetype_id = 1;
+            $counter_value_1->save();
+
+            $counter_value_2 = new CounterValue();
+            $counter_value_2->value = $request->counter_value_2;
+            $counter_value_2->is_real = true;
+            $counter_value_2->is_blocked = true;
+            $counter_value_2->date = $request->date_begin;
+            $counter_value_2->counter_id = $counter->id;
+            $counter_value_2->counterzonetype_id = 2;
+            $counter_value_2->save();
+        }
 
         return redirect('/abonents/' . $abonent->id);
 
@@ -124,24 +146,57 @@ class CounterController extends Controller
     {
         $user = Auth::user();
         if ($user == null || $user->cannot('update', $counter)) return abort(403);
-        $last_value = CounterValue::where('counter_id', $counter->id)->where('is_real', true)->orderBy('date', 'desc')->first();
-        $validation = $request->validate([
-            'number' => ['string', 'max:255'],
-            'date_end' => ['date', 'after:date_begin', 'after:' . $last_value->date, 'required_with:counter_value', 'nullable'],
-            'accrualtype_id' => ['required', 'exists:accrual_types,id'],
-            'counter_value' => ['required_with:date_end', 'numeric', 'min:' . $last_value->value, 'nullable']
-        ]);
-        $counter->fill($request->only('number', 'accrualtype_id'));
+        if ($counter->count_zones == 1) {
+            $last_value = CounterValue::where('counter_id', $counter->id)->where('is_real', true)->whereNull('counterzonetype_id')->orderBy('date', 'desc')->first();
+            $validation = $request->validate([
+                'number' => ['string', 'max:255'],
+                'date_end' => ['date', 'after:date_begin', 'after:' . $last_value->date, 'required_with:counter_value', 'nullable'],
+                'accrualtype_id' => ['required', 'exists:accrual_types,id'],
+                'counter_value' => ['required_with:date_end', 'numeric', 'min:' . $last_value->value, 'nullable']
+            ]);
+        }
+        if ($counter->count_zones == 2) {
+            $last_value_1 = CounterValue::where('counter_id', $counter->id)->where('is_real', true)->where('counterzonetype_id', 1)->orderBy('date', 'desc')->first();
+            $last_value_2 = CounterValue::where('counter_id', $counter->id)->where('is_real', true)->where('counterzonetype_id', 2)->orderBy('date', 'desc')->first();
+            $validation = $request->validate([
+                'number' => ['string', 'max:255'],
+                'date_end' => ['date', 'after:date_begin', 'after:' . $last_value->date, 'required_with:counter_value', 'nullable'],
+                'accrualtype_id' => ['required', 'exists:accrual_types,id'],
+                'counter_value_1' => ['required_with:date_end', 'numeric', 'min:' . $last_value_1->value, 'nullable'],
+                'counter_value_2' => ['required_with:date_end', 'numeric', 'min:' . $last_value_2->value, 'nullable']
+            ]);
+        }
+        $counter->fill($request->only('number', 'date_end', 'accrualtype_id'));
         $counter->save();
 
         if ($request->date_end !== null) {
-            $counter_value = new CounterValue();
-            $counter_value->value = $request->counter_value;
-            $counter_value->is_real = true;
-            $counter_value->is_blocked = false;
-            $counter_value->date = $request->date_end;
-            $counter_value->counter_id = $counter->id;
-            $counter_value->save();
+            if ($counter->count_zones == 1) {
+                $counter_value = new CounterValue();
+                $counter_value->value = $request->counter_value;
+                $counter_value->is_real = true;
+                $counter_value->is_blocked = false;
+                $counter_value->date = $request->date_end;
+                $counter_value->counter_id = $counter->id;
+                $counter_value->save();
+            }
+            if ($counter->count_zones == 2){
+                $counter_value_1 = new CounterValue();
+                $counter_value_1->value = $request->counter_value_1;
+                $counter_value_1->is_real = true;
+                $counter_value_1->is_blocked = false;
+                $counter_value_1->date = $request->date_end;
+                $counter_value_1->counter_id = $counter->id;
+                $counter_value_1->save();
+
+                $counter_value_2 = new CounterValue();
+                $counter_value_2->value = $request->counter_value_2;
+                $counter_value_2->is_real = true;
+                $counter_value_2->is_blocked = false;
+                $counter_value_2->date = $request->date_end;
+                $counter_value_2->counter_id = $counter->id;
+                $counter_value_2->save();
+            }
+            create_accrual_by_counter($counter->id);
         }
         return redirect('/counters/' . $counter->abonent_id);
     }

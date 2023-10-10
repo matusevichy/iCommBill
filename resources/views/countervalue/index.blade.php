@@ -9,6 +9,7 @@
         <tr>
             <th scope="row">{{__('Value date')}}</th>
             <th>{{__('Value')}}</th>
+            <th>{{__('Zone')}}</th>
             <th>{{__('Type')}}</th>
             <th>{{__('Actions')}}</th>
         </tr>
@@ -21,6 +22,9 @@
                 </td>
                 <td>
                     {{$counter_value->value}}
+                </td>
+                <td>
+                    {{($counter_value->counterzonetype_id == null)? "" : __($counter_value->counterzonetype->name)}}
                 </td>
                 <td>
                     {{$counter_value->is_real == 0 ? __('Calculated') : __('Real')}}

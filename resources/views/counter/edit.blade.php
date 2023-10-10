@@ -62,17 +62,58 @@
             @enderror
         </div>
         <div class="form-floating mb-3">
-            <input type="number" id="counter_value" name="counter_value"
-                   class="form-control @error('counter_value') is-invalid @enderror"
-                   step="0.01" value="{{ old('counter_value') }}" autocomplete="counter_value">
-            <label for="counter_value">{{__('Real end counter value')}}</label>
+            <input type="number" id="count_zones" name="count_zones"
+                   class="form-control @error('count_zones') is-invalid @enderror"
+                   step="1" value="{{ $counter->count_zones }}" min="1" max="2" readonly
+                   autocomplete="count_zones">
+            <label for="value">{{__('Zones count')}}</label>
 
-            @error('counter_value')
+            @error('count_zones')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
             @enderror
         </div>
+        @if($counter->count_zones == 1)
+            <div class="form-floating mb-3">
+                <input type="number" id="counter_value" name="counter_value"
+                       class="form-control @error('counter_value') is-invalid @enderror"
+                       step="0.01" value="{{ old('counter_value') }}" autocomplete="counter_value">
+                <label for="counter_value">{{__('Real end counter value')}}</label>
+
+                @error('counter_value')
+                <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+                @enderror
+            </div>
+        @endif
+        @if($counter->count_zones == 2)
+            <div class="form-floating mb-3">
+                <input type="number" id="counter_value_1" name="counter_value_1"
+                       class="form-control @error('counter_value_1') is-invalid @enderror"
+                       step="0.01" value="{{ old('counter_value_1') }}" autocomplete="counter_value_1">
+                <label for="value">{{__('Real end counter value')}} ({{__('Day')}})</label>
+
+                @error('counter_value_1')
+                <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+                @enderror
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" id="counter_value_2" name="counter_value_2"
+                       class="form-control @error('counter_value_2') is-invalid @enderror"
+                       step="0.01" value="{{ old('counter_value_2') }}" autocomplete="counter_value_2">
+                <label for="value">{{__('Real end counter value')}} ({{__('Night')}})</label>
+
+                @error('counter_value_2')
+                <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+                @enderror
+            </div>
+        @endif
         <div class="col-md-6 offset-md-4">
             <button type="submit" class="btn btn-primary">
                 {{ __('Submit') }}

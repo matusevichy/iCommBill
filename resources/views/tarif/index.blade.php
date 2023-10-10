@@ -14,6 +14,7 @@
             <th>{{__('Date begin')}}</th>
             <th>{{__('Date end')}}</th>
             <th>{{__('Accruals by square')}}</th>
+            <th>{{__('Zone')}}</th>
             <th>{{__('Actions')}}</th>
         </tr>
         </thead>
@@ -26,6 +27,7 @@
                 <td>{{$tarif->date_begin}}</td>
                 <td>{{$tarif->date_end}}</td>
                 <td>{{($tarif->by_square)? __("Yes") : __("No")}}</td>
+                <td>{{$tarif->counterzonetype? __($tarif->counterzonetype->name) : ''}}</td>
                 <td>
                     <div class="row">
                         <div class="col col-sm-auto px-1">

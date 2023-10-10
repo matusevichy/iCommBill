@@ -14,7 +14,8 @@ class Counter extends Model
         'number',
         'abonent_id',
         'accrualtype_id',
-        'date_begin'
+        'date_begin',
+        'date_end'
     ];
 
     public function abonent(){

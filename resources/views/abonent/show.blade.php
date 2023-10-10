@@ -101,6 +101,7 @@
                         <tr>
                             <th scope="col">{{__('Accrual type')}}</th>
                             <th>{{__('Value')}}</th>
+                            <th>{{__('Zone')}}</th>
                             <th>{{__('Date begin')}}</th>
                             <th>{{__('Date end')}}</th>
                         </tr>
@@ -110,6 +111,7 @@
                             <tr>
                                 <td>{{__($tarif->accrualtype->name)}}</td>
                                 <td>{{$tarif->value}}</td>
+                                <td>{{$tarif->counterzonetype? __($tarif->counterzonetype->name) : ''}}</td>
                                 <td>{{$tarif->date_begin}}</td>
                                 <td>{{$tarif->date_end}}</td>
                             </tr>

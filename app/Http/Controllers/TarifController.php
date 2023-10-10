@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dictionary\AccrualType;
+use App\Models\Dictionary\CounterZoneType;
 use App\Models\Organization;
 use App\Models\Tarif;
 use Illuminate\Http\Request;
@@ -30,13 +31,14 @@ class TarifController extends Controller
         $user = Auth::user();
         if ($user == null || $user->cannot('create', [Tarif::class, $organization])) return abort(403);
         $accrual_types = AccrualType::all();
-        return view('tarif.create', compact('organization', 'accrual_types'));
+        $counter_zone_types = CounterZoneType::all();
+        return view('tarif.create', compact('organization', 'accrual_types', 'counter_zone_types'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -47,10 +49,10 @@ class TarifController extends Controller
         $validation = $request->validate([
             'name' => ['string', 'max:255', 'nullable'],
             'value' => ['required', 'numeric'],
-            //ToDo check next condition
             'date_begin' => ['required', 'date', function ($attribute, $value, $fail) use ($request) {
                 $tarifs = Tarif::where('organization_id', $request->organization_id)->
-                where('accrualtype_id',$request->accrualtype_id)->
+                where('accrualtype_id', $request->accrualtype_id)->
+                where('counterzonetype_id', $request->counterzonetype_id)->
                 where(function ($query) use ($value, $request) {
                     $query->where('date_end', null)->orWhere('date_end', '>', $value);
                 });
@@ -71,15 +73,16 @@ class TarifController extends Controller
         $tarif->organization_id = $request->organization_id;
         $tarif->accrualtype_id = $request->accrualtype_id;
         $tarif->by_square = $request->has('by_square');
+        $tarif->counterzonetype_id = $request->counterzonetype_id;
         $tarif->save();
 
-        return redirect('/organizations/'.$organization->id);
+        return redirect('/organizations/' . $organization->id);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Tarif  $tarif
+     * @param \App\Models\Tarif $tarif
      * @return \Illuminate\Http\Response
      */
     public function show(Tarif $tarif)
@@ -90,7 +93,7 @@ class TarifController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Tarif  $tarif
+     * @param \App\Models\Tarif $tarif
      * @return \Illuminate\Http\Response
      */
     public function edit(Tarif $tarif)
@@ -98,28 +101,29 @@ class TarifController extends Controller
         $user = Auth::user();
         if ($user == null || $user->cannot('update', $tarif)) return abort(403);
         $accrual_types = AccrualType::all();
-        return view('tarif.edit', compact('tarif', 'accrual_types'));
+        $counter_zone_types = CounterZoneType::all();
+        return view('tarif.edit', compact('tarif', 'accrual_types', 'counter_zone_types'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Tarif  $tarif
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Tarif $tarif
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Tarif $tarif)
     {
-        //ToDo check accruals when tarif update or remove?
         $user = Auth::user();
         if ($user == null || $user->cannot('update', $tarif)) return abort(403);
         $validation = $request->validate([
             'name' => ['string', 'max:255', 'nullable'],
             'value' => ['required', 'numeric'],
-            //ToDo check next condition
-            'date_begin' => ['required', 'date', function ($attribute, $value, $fail) use ($request) {
-                $tarifs = Tarif::where('organization_id', $request->organization_id)->
-                where('accrualtype_id',$request->accrualtype_id)->
+            'date_begin' => ['required', 'date', function ($attribute, $value, $fail) use ($tarif, $request) {
+                $tarifs = Tarif::where('organization_id', $tarif->organization_id)->
+                where('id', '!=', $tarif->id)->
+                where('accrualtype_id', $request->accrualtype_id)->
+                where('counterzonetype_id', $request->counterzonetype_id)->
                 where(function ($query) use ($value, $request) {
                     $query->where('date_end', null)->orWhere('date_end', '>', $value);
                 });
@@ -131,23 +135,23 @@ class TarifController extends Controller
             'date_end' => ['date', 'after:date_begin', 'nullable'],
             'accrualtype_id' => ['required', 'exists:accrual_types,id']
         ]);
-        $tarif->fill($request->only('name', 'value', 'date_begin', 'date_end', 'accrualtype_id'));
+        $tarif->fill($request->only('name', 'value', 'date_begin', 'date_end', 'accrualtype_id', 'counterzonetype_id'));
         $tarif->by_square = $request->has('by_square');
         $tarif->save();
 
-        return redirect('/organizations/'.$tarif->organization_id);
+        return redirect('/organizations/' . $tarif->organization_id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Tarif  $tarif
+     * @param \App\Models\Tarif $tarif
      * @return \Illuminate\Http\Response
      */
     public function destroy(Tarif $tarif)
     {
         $organization_id = $tarif->organization_id;
         $tarif->delete();
-        return redirect('/organizations/'.$organization_id);
+        return redirect('/organizations/' . $organization_id);
     }
 }

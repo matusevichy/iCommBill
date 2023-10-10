@@ -11,6 +11,7 @@
             <th>{{__('Number')}}</th>
             <th>{{__('Date begin')}}</th>
             <th>{{__('Date end')}}</th>
+            <th>{{__('Zones count')}}</th>
             <th>{{__('Actions')}}</th>
         </tr>
         </thead>
@@ -21,6 +22,7 @@
                 <td><a href="{{route('counters.show', $counter->id)}}">{{$counter->number}}</a></td>
                 <td>{{$counter->date_begin}}</td>
                 <td>{{$counter->date_end}}</td>
+                <td>{{$counter->count_zones}}</td>
                 <td>
                     <div class="row">
                         <div class="col col-sm-auto px-1">

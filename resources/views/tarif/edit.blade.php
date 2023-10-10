@@ -56,7 +56,7 @@
                 <select name="accrualtype_id" id="accrualtype_id"
                         class="form-select  @error('accrualtype_id') is-invalid @enderror" required
                         onchange="changeType(this.options[this.selectedIndex].getAttribute('byCounter'))">
-                    <option value="" selected>{{__('Select accrual type')}}</option>
+                    <option value="">{{__('Select accrual type')}}</option>
                     @foreach($accrual_types as $type)
                         <option value="{{$type->id}}"
                                 {{$type->id == $tarif->accrualtype_id? 'selected': ''}}  byCounter="{{$type->by_counter}}">
@@ -71,10 +71,30 @@
             </span>
                 @enderror
             </div>
-            <div id="by_square_div" style="visibility: {{$tarif->accrualtype->by_counter == false? "visible" : "hidden"}}">
+            <div id="zone_types_div"
+                 style="visibility: {{$tarif->accrualtype->by_counter == true? "visible" : "hidden"}}">
+                <select name="counterzonetype_id" id="counterzonetype_id"
+                        class="form-select  @error('counterzonetype_id') is-invalid @enderror">
+                    <option value="" selected>{{__('Select zone type (if exist)')}}</option>
+                    @foreach($counter_zone_types as $zone_type)
+                        <option
+                            value="{{$zone_type->id}}" {{$zone_type->id == $tarif->counterzonetype_id? 'selected': ''}}>
+                            {{__($zone_type->name)}}
+                        </option>
+                    @endforeach
+                </select>
+
+                @error('counterzonetype_id')
+                <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+                @enderror
+            </div>
+            <div id="by_square_div"
+                 style="visibility: {{$tarif->accrualtype->by_counter == false? "visible" : "hidden"}}">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="by_square" name="by_square"
-                           {{($tarif->by_square == true)? "checked" : ""}}>
+                        {{($tarif->by_square == true)? "checked" : ""}}>
                     <label class="form-check-label ps-1">{{__('Accruals by square')}}</label>
                 </div>
             </div>
@@ -90,15 +110,24 @@
 @section('js')
     <script>
         function changeType(byCounter) {
-            element = document.getElementById("by_square_div");
-            bySquare = element.getElementsByTagName("input");
+            by_square_element = document.getElementById("by_square_div");
+            zone_types_element = document.getElementById('zone_types_div');
+            bySquare = by_square_element.getElementsByTagName("input");
+            zone_types = zone_types_element.querySelector("select");
             bySquare[0].checked = false;
+            zone_types.value = '';
             if (byCounter == 0) {
-                element.style.visibility = "visible";
-            } else {
-                element.style.visibility = "hidden";
+                by_square_element.style.visibility = "visible";
+                zone_types_element.style.visibility = "hidden";
             }
-            console.log(bySquare[0].checked);
+            else if(byCounter == 1) {
+                by_square_element.style.visibility = "hidden";
+                zone_types_element.style.visibility = "visible";
+            }
+            else{
+                by_square_element.style.visibility = "hidden";
+                zone_types_element.style.visibility = "hidden";
+            }
         }
     </script>
 @endsection
