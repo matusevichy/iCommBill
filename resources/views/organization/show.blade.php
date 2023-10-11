@@ -23,6 +23,18 @@
                         data-bs-target="#v-pills-tarifs" type="button" role="tab" aria-controls="v-pills-tarifs"
                         aria-selected="false">{{__('Tarifs')}}
                 </button>
+                <button class="nav-link" id="v-pills-expences-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-expences" type="button" role="tab" aria-controls="v-pills-expences"
+                        aria-selected="false">{{__('Expences')}}
+                </button>
+                <button class="nav-link" id="v-pills-incomes-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-incomes" type="button" role="tab" aria-controls="v-pills-incomes"
+                        aria-selected="false">{{__('Incomes')}}
+                </button>
+                <button class="nav-link" id="v-pills-saldos-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-saldos" type="button" role="tab" aria-controls="v-pills-saldos"
+                        aria-selected="false">{{__('Saldo')}}
+                </button>
                 <button class="nav-link" id="v-pills-abonents-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-abonents" type="button" role="tab" aria-controls="v-pills-abonents"
                         aria-selected="false">{{__('Abonents')}}
@@ -73,6 +85,14 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            {{__('Organization balance')}}
+                        </div>
+                        <div class="col">
+                            {{get_organization_saldo($organization->id)}}
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="v-pills-notice_for_owners" role="tabpanel" aria-labelledby="v-pills-notice_for_owners-tab">
                     @include('noticeforowner.index', $organization)
@@ -84,6 +104,15 @@
                     <a href="{{route('accruals.createByOrg', $organization->id)}}" class="btn btn-primary  mb-1"
                        role="button">{{__("Create accruals for abonents")}} </a>
                     @include('tarif.index', $organization)
+                </div>
+                <div class="tab-pane fade" id="v-pills-expences" role="tabpanel" aria-labelledby="v-pills-expences-tab">
+                    @include('organizationexpence.index', $organization)
+                </div>
+                <div class="tab-pane fade" id="v-pills-incomes" role="tabpanel" aria-labelledby="v-pills-incomes-tab">
+                    @include('organizationincome.index', $organization)
+                </div>
+                <div class="tab-pane fade" id="v-pills-saldos" role="tabpanel" aria-labelledby="v-pills-saldos-tab">
+                    @include('organizationsaldo.index', $organization)
                 </div>
                 <div class="tab-pane fade" id="v-pills-abonents" role="tabpanel" aria-labelledby="v-pills-abonents-tab">
                     @include('abonent.index', [$organization, $abonents])

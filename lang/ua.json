@@ -114,5 +114,18 @@
     "Real end counter value": "Реальні кінцеві показники лічильника",
     "or": "або",
     "Day": "День",
-    "Night": "Ніч"
+    "Night": "Ніч",
+    "Budget item type": "Типи статей бюджету",
+    "Budget item": "Стаття бюджету",
+    "Select budget item": "Оберіть статтю бюджету",
+    "Organization balance": "Баланс організації",
+    "Expences": "Видатки",
+    "Expence name": "Назва видатку",
+    "Add expence": "Додати видаток",
+    "Edit expence": "Редагувати видаток",
+    "Incomes": "Надходження",
+    "Income name": "Назва надходження",
+    "Add income": "Додати надходження",
+    "Edit income": "Редагувати надходження",
+    "Add saldo": "Додати сальдо"
 }

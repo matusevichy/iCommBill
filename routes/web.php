@@ -5,9 +5,13 @@ use App\Http\Controllers\AccrualController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\CounterController;
 use App\Http\Controllers\CounterValueController;
+use App\Http\Controllers\Dictionary\BudgetItemTypeController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\NoticeForOwnerController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationExpenceController;
+use App\Http\Controllers\OrganizationIncomeController;
+use App\Http\Controllers\OrganizationSaldoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PersonalAreaController;
 use App\Http\Controllers\SaldoController;
@@ -44,6 +48,15 @@ Route::resource('tarifs', TarifController::class)->except('create');
 Route::get('/notices/{organization}/create', [NoticeController::class, 'create'])->name('notices.create');
 Route::resource('notices', NoticeController::class)->except('create');
 
+Route::get('/organizationexpences/{organization}/create', [OrganizationExpenceController::class, 'create'])->name('organizationexpences.create');
+Route::resource('organizationexpences', OrganizationExpenceController::class)->except('create');
+
+Route::get('/organizationincomes/{organization}/create', [OrganizationIncomeController::class, 'create'])->name('organizationincomes.create');
+Route::resource('organizationincomes', OrganizationIncomeController::class)->except('create');
+
+Route::get('/organizationsaldos/{organization}/create', [OrganizationSaldoController::class, 'create'])->name('organizationsaldos.create');
+Route::resource('organizationsaldos', OrganizationSaldoController::class)->except('create');
+
 Route::get('/noticeforowners/{organization}/create', [NoticeForOwnerController::class, 'create'])->name('noticeforowners.create');
 Route::resource('noticeforowners', NoticeForOwnerController::class)->except('create');
 
@@ -68,6 +81,7 @@ Route::get('/personalarea', [PersonalAreaController::class, 'index'])->name('per
 Route::resources([
     'organizations' => OrganizationController::class,
     'users' => UserController::class,
+    'budgetitemtypes' => BudgetItemTypeController::class,
 ]);
 
 Route::match(['get', 'post'], 'botman', [BotManController::class, 'handle']);

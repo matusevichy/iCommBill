@@ -54,6 +54,11 @@
                                     <a class="dropdown-item" href="{{ route('users.index') }}">
                                         {{ __('Users') }}
                                     </a>
+                                    @can('viewAny',\App\Models\Dictionary\BudgetItemType::class)
+                                        <a class="dropdown-item" href="{{ route('budgetitemtypes.index') }}">
+                                            {{ __('Budget item type') }}
+                                        </a>
+                                    @endcan
                                 </div>
                             </li>
                     </ul>

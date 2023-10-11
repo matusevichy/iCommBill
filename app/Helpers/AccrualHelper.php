@@ -6,6 +6,9 @@ use App\Models\Counter;
 use App\Models\CounterValue;
 use App\Models\Dictionary\AccrualType;
 use App\Models\Organization;
+use App\Models\OrganizationExpence;
+use App\Models\OrganizationIncome;
+use App\Models\OrganizationSaldo;
 use App\Models\Payment;
 use App\Models\Saldo;
 use App\Models\Tarif;
@@ -188,6 +191,24 @@ if (!function_exists('get_abonent_saldo')) {
             $saldo += get_abonent_saldo_by_accrual_type($abonent_id, $type->id);
         }
         return $saldo;
+    }
+}
+
+if (!function_exists('get_organization_saldo')) {
+    function get_organization_saldo($id)
+    {
+        $saldo = OrganizationSaldo::where('organization_id', $id)->first();
+        if ($saldo != null) {
+            $result = $saldo->value;
+        } else {
+            $result = 0;
+        }
+        $income = OrganizationIncome::where('organization_id', $id)->sum('value');
+        $expence = OrganizationExpence::where('organization_id', $id)->sum('value');
+
+        $result += $income + $expence;
+
+        return $result;
     }
 }
 

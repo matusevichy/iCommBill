@@ -42,4 +42,16 @@ class Organization extends Model
     public function tarifs(){
         return $this->hasMany(Tarif::class);
     }
+
+    public function organizationexpences(){
+        return $this->hasMany(OrganizationExpence::class);
+    }
+
+    public function organizationincomes(){
+        return $this->hasMany(OrganizationIncome::class);
+    }
+
+    public function organizationsaldos(){
+        return $this->hasMany(OrganizationSaldo::class);
+    }
 }
