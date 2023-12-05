@@ -127,5 +127,9 @@
     "Income name": "Назва надходження",
     "Add income": "Додати надходження",
     "Edit income": "Редагувати надходження",
-    "Add saldo": "Додати сальдо"
+    "Add saldo": "Додати сальдо",
+    "Ownership": "Право власності",
+    "Cadastral number": "Кадастровий номер",
+    "Land tax": "Земельний податок",
+    "Organization tarifs": "Тарифи організації"
 }

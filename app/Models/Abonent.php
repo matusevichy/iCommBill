@@ -13,6 +13,7 @@ class Abonent extends Model
         'account_number',
         'location_number',
         'square',
+        'cadastral_number',
         'user_id',
         'organization_id'
     ];
@@ -35,5 +36,9 @@ class Abonent extends Model
 
     public function saldos(){
         return $this->hasMany(Saldo::class);
+    }
+
+    public function abonenttarifs(){
+        return $this->hasMany(AbonentTarif::class);
     }
 }

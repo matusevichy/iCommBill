@@ -53,6 +53,7 @@ class TarifController extends Controller
                 $tarifs = Tarif::where('organization_id', $request->organization_id)->
                 where('accrualtype_id', $request->accrualtype_id)->
                 where('counterzonetype_id', $request->counterzonetype_id)->
+                where('by_square', $request->has('by_square'))->
                 where(function ($query) use ($value, $request) {
                     $query->where('date_end', null)->orWhere('date_end', '>', $value);
                 });
@@ -124,6 +125,7 @@ class TarifController extends Controller
                 where('id', '!=', $tarif->id)->
                 where('accrualtype_id', $request->accrualtype_id)->
                 where('counterzonetype_id', $request->counterzonetype_id)->
+                where('by_square', $request->has('by_square'))->
                 where(function ($query) use ($value, $request) {
                     $query->where('date_end', null)->orWhere('date_end', '>', $value);
                 });

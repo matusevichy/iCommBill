@@ -10,6 +10,7 @@
         <th scope="col">{{__("Location number")}}</th>
         <th scope="col">{{__("Street")}}</th>
         <th scope="col">{{__("Square")}},{{__('m')}}<sup>2</sup></th>
+        <th scope="col">{{__("Ownership")}}</th>
         <th scope="col">{{__("Owner")}}</th>
         <th scope="col">{{__("Arrears")}}</th>
         <th scope="col">{{__("Actions")}}</th>
@@ -22,6 +23,7 @@
             <td>{{$abonent->location_number}}</td>
             <td>{{$abonent->street}}</td>
             <td>{{$abonent->square}}</td>
+            <td>{{($abonent->ownership == true) ? __("Yes") : __("No")}}</td>
             <td>{{$abonent->user->name}}</td>
             <td>{{get_abonent_saldo($abonent->id)}}</td>
             <td>

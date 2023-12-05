@@ -11,6 +11,10 @@
                         data-bs-target="#v-pills-general" type="button" role="tab" aria-controls="v-pills-general"
                         aria-selected="true">{{__('General')}}
                 </button>
+                <button class="nav-link" id="v-pills-org-tarifs-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-org-tarifs" type="button" role="tab" aria-controls="v-pills-org-tarifs"
+                        aria-selected="false">{{__('Organization tarifs')}}
+                </button>
                 <button class="nav-link" id="v-pills-tarifs-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-tarifs" type="button" role="tab" aria-controls="v-pills-tarifs"
                         aria-selected="false">{{__('Current tarifs')}}
@@ -70,6 +74,22 @@
                     </div>
                     <div class="row">
                         <div class="col">
+                            {{__("Ownership")}}
+                        </div>
+                        <div class="col">
+                            {{($abonent->ownership == true) ? __("Yes") : __("No")}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{__("Cadastral number")}}
+                        </div>
+                        <div class="col">
+                            {{$abonent->cadastral_number}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             {{__('Owner')}}
                         </div>
                         <div class="col">
@@ -95,7 +115,7 @@
                         @endif
                     @endforeach
                 </div>
-                <div class="tab-pane fade" id="v-pills-tarifs" role="tabpanel" aria-labelledby="v-pills-tarifs-tab">
+                <div class="tab-pane fade" id="v-pills-org-tarifs" role="tabpanel" aria-labelledby="v-pills-org-tarifs-tab">
                     <table class="table table-striped table-responsive-md">
                         <thead>
                         <tr>
@@ -107,17 +127,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($tarifs as $tarif)
+                        @foreach($org_tarifs as $org_tarif)
                             <tr>
-                                <td>{{__($tarif->accrualtype->name)}}</td>
-                                <td>{{$tarif->value}}</td>
-                                <td>{{$tarif->counterzonetype? __($tarif->counterzonetype->name) : ''}}</td>
-                                <td>{{$tarif->date_begin}}</td>
-                                <td>{{$tarif->date_end}}</td>
+                                <td>{{__($org_tarif->accrualtype->name)}}</td>
+                                <td>{{$org_tarif->value}}</td>
+                                <td>{{$org_tarif->counterzonetype? __($org_tarif->counterzonetype->name) : ''}}</td>
+                                <td>{{$org_tarif->date_begin}}</td>
+                                <td>{{$org_tarif->date_end}}</td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="tab-pane fade" id="v-pills-tarifs" role="tabpanel" aria-labelledby="v-pills-tarifs-tab">
+                    @include('abonenttarif.index', $tarifs)
                 </div>
                 <div class="tab-pane fade" id="v-pills-saldo" role="tabpanel" aria-labelledby="v-pills-saldo-tab">
                     @include('saldo.index', $saldos)

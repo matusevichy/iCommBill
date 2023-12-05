@@ -34,22 +34,22 @@
             </span>
                 @enderror
             </div>
-            <div>
-                <h3>{{__('Abonents')}}</h3>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="select_all">
-                    <label class="form-check-label ps-1">{{__('Select all')}}</label>
-                </div>
-                @foreach($abonents as $abonent)
-                    <div class="list-group">
-                        <li class="list-group-item">
-                            <input class="form-check-input abonent" type="checkbox" name="abonents[]" value="{{$abonent->id}}">
-                            <label
-                                class="form-check-label ps-1">N{{$abonent->location_number}} {{$abonent->user->name}}</label>
-                        </li>
-                    </div>
-                @endforeach
-            </div>
+{{--            <div>--}}
+{{--                <h3>{{__('Abonents')}}</h3>--}}
+{{--                <div class="form-check">--}}
+{{--                    <input class="form-check-input" type="checkbox" id="select_all">--}}
+{{--                    <label class="form-check-label ps-1">{{__('Select all')}}</label>--}}
+{{--                </div>--}}
+{{--                @foreach($abonents as $abonent)--}}
+{{--                    <div class="list-group">--}}
+{{--                        <li class="list-group-item">--}}
+{{--                            <input class="form-check-input abonent" type="checkbox" name="abonents[]" value="{{$abonent->id}}">--}}
+{{--                            <label--}}
+{{--                                class="form-check-label ps-1">N{{$abonent->location_number}} {{$abonent->user->name}}</label>--}}
+{{--                        </li>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
             <div class="col-md-6 offset-md-4">
                 <input type="hidden" name="organization_id" value="{{$organization->id}}">
                 <button type="submit" class="btn btn-primary">
@@ -59,18 +59,18 @@
         </form>
     </div>
 @endsection
-@section('js')
-    <script>
-        window.addEventListener("DOMContentLoaded", function () {
-            const selectAll = document.getElementById("select_all");
+{{--@section('js')--}}
+{{--    <script>--}}
+{{--        window.addEventListener("DOMContentLoaded", function () {--}}
+{{--            const selectAll = document.getElementById("select_all");--}}
 
-            selectAll.addEventListener('change', function () {
-                let abonents = document.querySelectorAll('.abonent');
-                let checked = this.checked;
-                for (let i = 0; i < abonents.length; i++) {
-                    abonents[i].checked = checked;
-                }
-            });
-        });
-    </script>
-@endsection
+{{--            selectAll.addEventListener('change', function () {--}}
+{{--                let abonents = document.querySelectorAll('.abonent');--}}
+{{--                let checked = this.checked;--}}
+{{--                for (let i = 0; i < abonents.length; i++) {--}}
+{{--                    abonents[i].checked = checked;--}}
+{{--                }--}}
+{{--            });--}}
+{{--        });--}}
+{{--    </script>--}}
+{{--@endsection--}}

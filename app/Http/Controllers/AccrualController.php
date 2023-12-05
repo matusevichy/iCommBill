@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Abonent;
+use App\Models\AbonentTarif;
 use App\Models\Accrual;
 use App\Models\Dictionary\AccrualType;
 use App\Models\Organization;
 use App\Models\Tarif;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,8 +35,8 @@ class AccrualController extends Controller
         if ($user == null ||
             !in_array($organization->id, $user->organizations()->allRelatedIds()->toArray())) return abort(403);
         $accrual_types = AccrualType::where('by_counter', false)->get();
-        $abonents = Abonent::where('organization_id', $organization->id)->get();
-        return view('accrual.createByOrg', compact('organization', 'accrual_types', 'abonents'));
+//        $abonents = Abonent::where('organization_id', $organization->id)->get();
+        return view('accrual.createByOrg', compact('organization', 'accrual_types'));
     }
 
     /**
@@ -61,27 +63,38 @@ class AccrualController extends Controller
         $user = Auth::user();
         if ($user == null ||
             !in_array($request->organization_id, $user->organizations()->allRelatedIds()->toArray())) return abort(403);
-        $tarif = Tarif::where('accrualtype_id', $request->accrualtype_id)
+        $tarifs = Tarif::where('accrualtype_id', $request->accrualtype_id)
             ->where('date_begin', '<', $request->date)
             ->where(function ($query) use ($request) {
                 $query->where('date_end', null)->orWhere('date_end', '>', $request->date);
-            })->first();
+            })->get();
         $validation = $request->validate([
-            'date' => ['required', 'date', function ($attribute, $value, $fail) use ($tarif, $request) {
-                if ($tarif == null) {
+            'date' => ['required', 'date', function ($attribute, $value, $fail) use ($tarifs, $request) {
+                if ($tarifs == null) {
                     $fail('On date ' . $request->date . ' organization hasn`t tarif. Accrual is not available!');
                 }
             }],
             'organization_id' => ['required', 'exists:organizations,id'],
             'accrualtype_id' => ['required', 'exists:accrual_types,id']
         ]);
+        $abonents = Abonent::where('organization_id', $request->organization_id)
+            ->whereHas('abonenttarifs', function (Builder $query) use ($request) {
+                $query->where('accrualtype_id', $request->accrualtype_id);
+            })->get();
 
-        foreach ($request->abonents as $abonent_id) {
-            $abonent = Abonent::whereId($abonent_id)->first();
+        foreach ($abonents as $abonent) {
+            $abonenttarif = AbonentTarif::where('abonent_id', $abonent->id)
+                ->where('accrualtype_id', $request->accrualtype_id)
+                ->where('date_begin', '<', $request->date)
+                ->where(function ($query) use ($request) {
+                    $query->where('date_end', null)->orWhere('date_end', '>', $request->date);
+                })->first();
+
+            $tarif = $tarifs->where('by_square', $abonenttarif->by_square)->first();
             $accrual = new Accrual();
-            $accrual->value = $tarif->by_square == true? $tarif->value * $abonent->square : $tarif->value;
+            $accrual->value = $tarif->by_square == true ? $tarif->value * $abonent->square : $tarif->value;
             $accrual->date = $request->date;
-            $accrual->abonent_id = $abonent_id;
+            $accrual->abonent_id = $abonent->id;
             $accrual->accrualtype_id = $request->accrualtype_id;
             $accrual->save();
         }

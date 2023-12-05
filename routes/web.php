@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbonentController;
+use App\Http\Controllers\AbonentTarifController;
 use App\Http\Controllers\AccrualController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\CounterController;
@@ -67,6 +68,9 @@ Route::get('/accruals/{abonent}/create', [AccrualController::class, 'create'])->
 Route::get('/accruals/{organization}/createByOrg', [AccrualController::class, 'createByOrg'])->name('accruals.createByOrg');
 Route::post('/accrualsByOrg', [AccrualController::class, 'storeByOrg'])->name('accruals.storeByOrg');
 Route::resource('accruals', AccrualController::class)->except('create');
+
+Route::get('/abonenttarifs/{abonent}/create', [AbonentTarifController::class, 'create'])->name('abonenttarifs.create');
+Route::resource('abonenttarifs', AbonentTarifController::class)->except('create');
 
 Route::get('/payments/{abonent}/create', [PaymentController::class, 'create'])->name('payments.create');
 Route::resource('payments', PaymentController::class)->except('create');
